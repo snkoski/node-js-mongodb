@@ -1,13 +1,21 @@
 import React from 'react';
 import ReactDOM, { hydrate } from 'react-dom';
 
-
 import App from './components/App';
 
-ReactDOM.hydrate(
-  <App initialContests={[]}/>,
-  document.getElementById('root')
-)
+
+// axios.get('/api/contests')
+//   .then(resp => {
+    ReactDOM.hydrate(
+      <App initialContests={window.initialData.contests}/>,
+      document.getElementById('root')
+    )
+    // this.setState({
+    //   contests: resp.data.contests
+    // })
+  // })
+  // .catch(console.error)
+
 
 
 // class App extends React.Component {

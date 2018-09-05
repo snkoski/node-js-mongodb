@@ -13,4 +13,10 @@ router.get('/contests', (req, res) => {
   })
 })
 
+router.get('/contests/:contestId', (req, res) => {
+  let contest = contests[req.params.contestId];
+  contest.description = `This is just a place holder for the contest description of contest ${req.params.contestId}`
+  res.send(contest)
+})
+
 export default router

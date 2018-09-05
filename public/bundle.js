@@ -8160,6 +8160,14 @@
 	          contests: _extends({}, _this.state.contests, _defineProperty({}, contest.id, contest))
 	        });
 	      });
+	    }, _this.fetchContestList = function () {
+	      pushState({ currentContestId: null }, '/');
+	      api.fetchContestList().then(function (contests) {
+	        _this.setState({
+	          currentContestId: null,
+	          contests: contests
+	        });
+	      });
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
@@ -8192,7 +8200,9 @@
 	    key: 'currentContent',
 	    value: function currentContent() {
 	      if (this.state.currentContestId) {
-	        return _react2.default.createElement(_Contest2.default, this.currentContest());
+	        return _react2.default.createElement(_Contest2.default, _extends({
+	          contestListClick: this.fetchContestList
+	        }, this.currentContest()));
 	      }
 	      return _react2.default.createElement(_ContestList2.default, {
 	        onContestClick: this.fetchContest,
@@ -10634,7 +10644,17 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'Contest' },
-	        this.props.description
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'contest-description' },
+	          this.props.description
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'home-link link',
+	            onClick: this.props.contestListClick },
+	          'Contest List'
+	        )
 	      );
 	    }
 	  }]);
@@ -10643,7 +10663,8 @@
 	}(_react2.default.Component);
 	
 	Contest.propTypes = {
-	  description: _propTypes2.default.string.isRequired
+	  description: _propTypes2.default.string.isRequired,
+	  contestListClick: _propTypes2.default.func.isRequired
 	};
 	
 	exports.default = Contest;
@@ -10660,7 +10681,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.fetchContest = undefined;
+	exports.fetchContestList = exports.fetchContest = undefined;
 	
 	var _axios = __webpack_require__(/*! axios */ 32);
 	
@@ -10671,6 +10692,12 @@
 	var fetchContest = exports.fetchContest = function fetchContest(contestId) {
 	  return _axios2.default.get('/api/contests/' + contestId).then(function (resp) {
 	    return resp.data;
+	  });
+	};
+	
+	var fetchContestList = exports.fetchContestList = function fetchContestList() {
+	  return _axios2.default.get('/api/contests').then(function (resp) {
+	    return resp.data.contests;
 	  });
 	};
 

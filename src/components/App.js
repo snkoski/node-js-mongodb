@@ -8,6 +8,9 @@ import * as api from '../api';
 
 const pushState = (obj, url) => window.history.pushState(obj, "", url)
 
+const onPopState = handler => {
+  window.onpopstate = handler
+}
 
 class App extends React.Component {
   static propTypes = {
@@ -23,8 +26,17 @@ class App extends React.Component {
     //     })
     //   })
     //   .catch(console.error)
-
+    onPopState((event) => {
+      this.setState({
+        currentContestId: (event.state || {}).currentContestId
+      })
+    });
   }
+
+  componentWillUnmount() {
+    onPopState(null);
+  }
+
   fetchContest = (contestId) => {
     pushState(
       { currentContestId: contestId },

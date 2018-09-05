@@ -8138,6 +8138,10 @@
 	  return window.history.pushState(obj, "", url);
 	};
 	
+	var onPopState = function onPopState(handler) {
+	  window.onpopstate = handler;
+	};
+	
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
 	
@@ -8174,6 +8178,8 @@
 	  _createClass(App, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      var _this2 = this;
+	
 	      // axios.get('/api/contests')
 	      //   .then(resp => {
 	      //     this.setState({
@@ -8181,7 +8187,16 @@
 	      //     })
 	      //   })
 	      //   .catch(console.error)
-	
+	      onPopState(function (event) {
+	        _this2.setState({
+	          currentContestId: (event.state || {}).currentContestId
+	        });
+	      });
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      onPopState(null);
 	    }
 	  }, {
 	    key: 'currentContest',

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 // import axios from 'axios';
 import ContestList from './ContestList';
 import Header from './Header';
@@ -9,10 +10,10 @@ const pushState = (obj, url) => window.history.pushState(obj, "", url)
 
 
 class App extends React.Component {
-  state = {
-    pageHeader: 'Naming Contest',
-    contests: this.props.initialContests
+  static propTypes = {
+    initialData: PropTypes.object.isRequired
   }
+  state = this.props.initialData
 
   componentDidMount() {
     // axios.get('/api/contests')
@@ -31,7 +32,6 @@ class App extends React.Component {
     );
     api.fetchContest(contestId).then(contest => {
       this.setState({
-        pageHeader: contest.contestName,
         currentContestId: contest.id,
         contests: {
           ...this.state.contests,
@@ -41,9 +41,20 @@ class App extends React.Component {
     });
   };
 
+  currentContest() {
+    return this.state.contests[this.state.currentContestId]
+  }
+
+  pageHeader() {
+    if (this.state.currentContestId) {
+      return this.currentContest().contestName;
+    }
+    return 'Naming Contest';
+  }
+
   currentContent() {
     if (this.state.currentContestId) {
-      return <Contest {...this.state.contests[this.state.currentContestId]} />
+      return <Contest {...this.currentContest()} />
     }
       return <ContestList
         onContestClick={this.fetchContest}
@@ -53,7 +64,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header message={this.state.pageHeader} />
+        <Header message={this.pageHeader()} />
       {this.currentContent()}
       </div>
     )

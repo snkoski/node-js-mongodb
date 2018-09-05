@@ -7,7 +7,7 @@ import App from './components/App';
 // axios.get('/api/contests')
 //   .then(resp => {
     ReactDOM.hydrate(
-      <App initialContests={window.initialData.contests}/>,
+      <App initialData={window.initialData}/>,
       document.getElementById('root')
     )
     // this.setState({
